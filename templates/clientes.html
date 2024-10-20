@@ -11,7 +11,7 @@
 <body>
     <div class="container mt-5">
         <h2>Registro de Clientes</h2>
-        <form id="registration-form" method="POST" action="{{ url_for('clientes') }}">
+        <form id="registration-form" >
             <div class="form-group">
                 <label for="nombre">Nombre</label>
                 <input type="text" name="nombre" class="input-lg" id="nombre" placeholder="Ingrese su nombre" required maxlength="50">
@@ -77,14 +77,35 @@
     
             $('#registration-form').submit(function(e) {
                 e.preventDefault();
-    
-                // Validaciones para otros campos...
-    
-                // Si todo está bien, continuar con el registro
-                if (!$('.has-error').length) {
-                    alert('Cliente registrado con éxito.');
-                    // Aquí puedes hacer una llamada AJAX para enviar los datos al servidor
+                var formData = {
+                nombre: $('#nombre').val(),
+                apellidos: $('#apellido').val(),
+                genero: $('#género').val(),
+                correo: $('#email').val(),
+                telefono: $('#phone').val(),
+                numero_tarjeta: $('#card-number').val(),
+                fecha_expiracion: $('#card-expiry').val(),
+                cvv: $('#card-cvc').val()
+            };
+
+            // Enviar los datos mediante AJAX al servidor
+            $.ajax({
+                url: "{{ url_for('registrar_cliente') }}", // La URL a la que se enviarán los datos (endpoint de tu servidor)
+                type: "POST",  // Método HTTP
+                contentType: "application/json",  // Especificar que se está enviando JSON
+                dataType: "json",  // Tipo de datos esperado en la respuesta
+                data: JSON.stringify(formData),  // Convertir los datos en formato JSON
+                success: function(response) {
+                    // Manejar la respuesta del servidor
+                    console.log(response);
+                    alert('Cliente registrado exitosamente.');
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores
+                    console.error(error);
+                    alert('Ocurrió un error al registrar el cliente.');
                 }
+            });
             });
         });
     </script>

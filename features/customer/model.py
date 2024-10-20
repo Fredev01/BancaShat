@@ -2,9 +2,8 @@ from sqlalchemy import Column, Integer, Text, Boolean, String, Float, Enum, Date
 from features import db
 
 
-class Cliente(db.Model):
-    __tablename__ = 'clientes'
-    
+class Customer(db.Model):
+
     id = Column(Integer, primary_key=True)
     nombre = Column(String(50), nullable=False)
     apellidos = Column(String(50), nullable=False)
@@ -17,5 +16,5 @@ class Cliente(db.Model):
     fecha_registro = Column(DateTime, default=db.func.current_timestamp())
 
     def __repr__(self):
-        return f'<Cliente {self.nombre} {self.apellidos}>'
+        return f'<Cliente nombre={self.nombre} apellidos={self.apellidos} genero={self.genero} correo={self.correo} telefono={self.telefono} numero_tarjeta={self.numero_tarjeta} fecha_expiracion={self.fecha_expiracion} cvv={self.cvv}>'
 

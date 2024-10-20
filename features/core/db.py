@@ -1,8 +1,8 @@
 from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
-import pymysql
+# import pymysql
 
-pymysql.install_as_MySQLdb()
+# pymysql.install_as_MySQLdb()
 
 db = SQLAlchemy()
 
