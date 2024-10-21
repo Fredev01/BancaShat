@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Aviso de Privacidad</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,21 +45,23 @@
             font-size: 1.2em;
         }
     </style>
+
 </head>
 <body>
-
-    <!-- Navbar -->
-    <div class="navbar">
+<div class="navbar">
         <a href="{{ url_for('clientes') }}">Agregar Cliente</a>
         <a href="{{ url_for('clientes') }}">Enviar Mensaje a la Empresa</a>
         <a href="{{ url_for('aviso_privacidad') }}">Aviso de Privacidad</a>
     </div>
-
-    <!-- Contenido principal -->
     <div class="container">
-        <h1>Bienvenido a Nuestra Empresa</h1>
-        <p>Utiliza la barra de navegación para agregar un cliente, ver nuestro aviso de privacidad o enviar un mensaje a la empresa.</p>
+        <h1>Aviso de Privacidad</h1>
+        <p><strong>Hotel Sureste S.A. de C.V.</strong>, con domicilio en Calle Hermanos Bastar Zozaya 626, Centro Delegación Cinco, 86000 Villahermosa, Tab., es responsable del tratamiento de los datos personales que usted nos proporcione, los cuales serán protegidos conforme a la Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados.</p>
+        <h2>Finalidades del tratamiento:</h2>
+        <p>Sus datos personales serán utilizados para gestionar sus reservaciones, confirmar su estancia, procesar pagos, así como para enviarle información y responder a sus consultas.</p>
+        <h2>Transferencias de datos:</h2>
+        <p>No realizamos transferencias de sus datos personales a terceros sin su consentimiento, salvo aquellas que sean necesarias para cumplir con obligaciones legales.</p>
+        <p>Puede consultar el Aviso de Privacidad Integral en nuestro sitio web: <a href="http://www.hotelsureste.com/avisodeprivacidad" target="_blank">www.hotelsureste.com/avisodeprivacidad</a> o en nuestro domicilio.</p>
+        <p><em>Fecha de actualización: 15 de septiembre de 2024</em></p>
     </div>
-
 </body>
 </html>
