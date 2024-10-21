@@ -79,19 +79,19 @@ def clientes():
 @app.route('/mensajes')
 def mostrar_mensajes():
     try:
-        # Consultar todos los mensajes
+       
         mensajes = Mensaje.query.all()
         
-        # Desencriptar los mensajes
+        
         for mensaje in mensajes:
             try:
-                # Asumiendo que el campo 'mensaje' está encriptado
-                mensaje.mensaje = aes_encrypt.decrypt(mensaje.mensaje)  # Desencriptar
+               
+                mensaje.mensaje = aes_encrypt.decrypt(mensaje.mensaje)  
             except Exception as decrypt_error:
                 print(f'Error al desencriptar el mensaje ID {mensaje.id}: {decrypt_error}')
-                mensaje.mensaje = f"Error al desencriptar el mensaje: {str(decrypt_error)}"  # Mostrar el error
+                mensaje.mensaje = f"Error al desencriptar el mensaje: {str(decrypt_error)}"  
         
-        # Renderizar la plantilla y pasarle los mensajes
+        
         return render_template('mensajes.html', mensajes=mensajes)
     except Exception as e:
         print(f'Error al consultar mensajes: {e}')
