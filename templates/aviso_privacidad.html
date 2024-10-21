@@ -5,8 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Aviso de Privacidad</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estilos para la navbar */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        /* Estilos para el contenido principal */
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+    </style>
+
 </head>
 <body>
+<div class="navbar">
+        <a href="{{ url_for('clientes') }}">Agregar Cliente</a>
+        <a href="{{ url_for('clientes') }}">Enviar Mensaje a la Empresa</a>
+        <a href="{{ url_for('aviso_privacidad') }}">Aviso de Privacidad</a>
+    </div>
     <div class="container">
         <h1>Aviso de Privacidad</h1>
         <p><strong>Hotel Sureste S.A. de C.V.</strong>, con domicilio en Calle Hermanos Bastar Zozaya 626, Centro Delegación Cinco, 86000 Villahermosa, Tab., es responsable del tratamiento de los datos personales que usted nos proporcione, los cuales serán protegidos conforme a la Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados.</p>
