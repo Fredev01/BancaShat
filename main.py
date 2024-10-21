@@ -21,6 +21,10 @@ db.init_app(app)
 def index():
     return render_template('index.html')
 
+@app.route('/aviso-privacidad')
+def aviso_privacidad():
+    return render_template('aviso_privacidad.html')
+
 def consultar_clientes() -> list[Customer]:
     """Función para consultar todos los clientes en la base de datos."""
     return Customer.query.all()
