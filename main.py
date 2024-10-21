@@ -3,6 +3,7 @@ import pymysql
 from features import settings
 from features import db
 from features.customer import Customer
+from features.customer.model import  Mensaje
 from utils import RSAEncrypt, AESEncrypt
 
 pymysql.install_as_MySQLdb()
@@ -61,31 +62,6 @@ def registrar_cliente():
 
     return jsonify({'message': 'Cliente registrado exitosamente'}), 201
 
-@app.post('/registrar_mensaje')
-def registrar_mensaje():
-    data = request.json
-    nombre = data.get('nombre')
-    correo = data.get('correo')
-    telefono = data.get('telefono')
-    mensaje = data.get('mensaje')
-    # TODO: Validar los datos
-
-    # Encriptar los datos
-    mensaje_encrypted = aes_encrypt.encrypt(mensaje)
-    try:
-        nuevo_mensaje = Mensaje(
-            nombre=nombre,
-            correo=correo,
-            telefono=telefono,
-            mensaje=mensaje_encrypted
-        )
-        db.session.add(nuevo_mensaje)
-        db.session.commit()
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return jsonify({'message': 'Error al enviar mensaje'}), 500
-
-    return jsonify({'message': 'Mensaje enviado exitosamente'}), 201
 
 @app.get('/clientes')
 def clientes():
@@ -102,9 +78,50 @@ def clientes():
         customers_decrypted.append(customer)
     return render_template('clientes.html', clientes=customers_decrypted)
 
-@app.get('/mensajes')
-def mensajes():
-    return render_template('mensajes.html')
+@app.post('/registrar-mensaje')
+def registrar_mensaje():
+    data = request.json
+    nombre = data.get('nombre')
+    correo = data.get('correo')
+    telefono = data.get('telefono')
+    mensaje = data.get('mensaje')
+    # TODO: Validar los datos
+
+    mensaje_encrypted = aes_encrypt.encrypt(mensaje)
+    try:
+        nuevo_mensaje = Mensaje(
+            nombre=nombre,
+            correo=correo,
+            telefono=telefono,
+            mensaje=mensaje_encrypted
+        )
+        db.session.add(nuevo_mensaje)
+        db.session.commit()
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({'message': 'Error al registrar el cliente'}), 500
+
+    return jsonify({'message': 'Cliente registrado exitosamente'}), 201
+
+@app.route('/mensajes')
+def mostrar_mensajes():
+    try:
+        mensajes = Mensaje.query.all()
+        for mensaje in mensajes:
+            try:
+                mensaje.mensaje = aes_encrypt.decrypt(mensaje.mensaje)  
+            except Exception as decrypt_error:
+                print(f'Error al desencriptar el mensaje ID {mensaje.id}: {decrypt_error}')
+                mensaje.mensaje = f"Error al desencriptar el mensaje: {str(decrypt_error)}"  
+        return render_template('mensajes.html', mensajes=mensajes)
+    except Exception as e:
+        print(f'Error al consultar mensajes: {e}')
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/mensajes/form')
+def mensajes_form():
+    return render_template('formMensaje.html')
+
 
 if __name__ == "__main__":
     with app.app_context():
