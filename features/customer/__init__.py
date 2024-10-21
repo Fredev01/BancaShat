@@ -1,1 +1,1 @@
-from .model import Customer
+from .model import Cliente
