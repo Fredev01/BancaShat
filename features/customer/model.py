@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, Boolean, String, Float, Enum, DateTime
+from sqlalchemy import Column, Integer, Text, Boolean, String, Float, Enum, DateTime, BLOB
 from features import db
 
 
@@ -23,7 +23,7 @@ class Mensaje(db.Model):
     nombre = Column(String(50), nullable=False)
     correo = Column(String(100), nullable=False) 
     telefono = Column(String(15))  
-    mensaje = Column(Text, nullable=False)  
+    mensaje = Column(BLOB, nullable=False)
 
     def __repr__(self):
         return f'<Mensaje nombre={self.nombre} correo={self.correo} telefono={self.telefono} mensaje={self.mensaje}>'

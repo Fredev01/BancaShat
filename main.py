@@ -87,7 +87,7 @@ def registrar_mensaje():
     mensaje = data.get('mensaje')
     # TODO: Validar los datos
 
-    mensaje_encrypted = aes_encrypt.encrypt(mensaje)
+    mensaje_encrypted = rsa_encrypt.encrypt(mensaje)
     try:
         nuevo_mensaje = Mensaje(
             nombre=nombre,
@@ -99,9 +99,9 @@ def registrar_mensaje():
         db.session.commit()
     except Exception as e:
         print(f"Error: {str(e)}")
-        return jsonify({'message': 'Error al registrar el cliente'}), 500
+        return jsonify({'message': 'Error al registrar el mensaje'}), 500
 
-    return jsonify({'message': 'Cliente registrado exitosamente'}), 201
+    return jsonify({'message': 'Mensaje registrado exitosamente'}), 201
 
 @app.route('/mensajes')
 def mostrar_mensajes():
@@ -109,7 +109,7 @@ def mostrar_mensajes():
         mensajes = Mensaje.query.all()
         for mensaje in mensajes:
             try:
-                mensaje.mensaje = aes_encrypt.decrypt(mensaje.mensaje)  
+                mensaje.mensaje = rsa_encrypt.decrypt(mensaje.mensaje)
             except Exception as decrypt_error:
                 print(f'Error al desencriptar el mensaje ID {mensaje.id}: {decrypt_error}')
                 mensaje.mensaje = f"Error al desencriptar el mensaje: {str(decrypt_error)}"  
