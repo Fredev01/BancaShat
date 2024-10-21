@@ -39,3 +39,11 @@ h2 {
 .has-error input {
     border-color: red;
 }
+.input-error {
+    border-color: red;
+}
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+}
