@@ -2,7 +2,7 @@ from flask import Flask, jsonify, redirect, render_template, request, url_for
 import pymysql
 from features import settings
 from features import db
-from features.customer.model import Cliente
+from features.customer.model import Cliente, Mensaje
 
 pymysql.install_as_MySQLdb()
 
@@ -73,6 +73,16 @@ def clientes():
     clientes = consultar_clientes()
     return render_template('clientes.html', clientes=clientes)
 
+@app.route('/mensajes')
+def mostrar_mensajes():
+    try:
+        # Consultar todos los mensajes
+        mensajes = Mensaje.query.all()
+        # Renderizar la plantilla y pasarle los mensajes
+        return render_template('mensajes.html', mensajes=mensajes)
+    except Exception as e:
+        print(f'Error al consultar mensajes: {e}')
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == "__main__":

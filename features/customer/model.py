@@ -19,3 +19,10 @@ class Cliente(db.Model):
     def __repr__(self):
         return f'<Cliente {self.nombre} {self.apellidos}>'
 
+class Mensaje(db.Model):
+    __tablename__ = 'mensajes'
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    correo = db.Column(db.String(120), nullable=False)
+    telefono = db.Column(db.String(20), nullable=False)
+    mensaje = db.Column(db.Text, nullable=False)
