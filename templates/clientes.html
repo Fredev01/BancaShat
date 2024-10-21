@@ -9,16 +9,22 @@
     <script src="{{ url_for('static', filename='js/jquery.payment.min.js') }}"></script>
 </head>
 <body>
+
     <div class="container mt-5">
+       <button type="submit" class="btn">
+           <a href="{{ url_for('index') }}" style="text-decoration: none; color: #efefef;">Volver a home</a>
+       </button>
         <h2>Registro de Clientes</h2>
-        <form id="registration-form" method="POST" action="{{ url_for('clientes') }}">
+        <form id="registration-form">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" name="nombre" class="input-lg" id="nombre" placeholder="Ingrese su nombre" required maxlength="50">
+                <input type="text" name="nombre" class="input-lg" id="nombre" placeholder="Ingrese su nombre" required maxlength="50" pattern="[A-Za-z\s]+">
+                <span class="error-message" id="nombre-error">El nombre solo puede contener letras y espacios.</span>
             </div>
             <div class="form-group">
                 <label for="apellido">Apellido(s)</label>
-                <input type="text" name="apellidos" class="input-lg" id="apellido" placeholder="Ingrese su(s) apellido(s)" required maxlength="50">
+                <input type="text" name="apellidos" class="input-lg" id="apellido" placeholder="Ingrese su(s) apellido(s)" required maxlength="50" pattern="[A-Za-z\s]+">
+                <span class="error-message" id="apellido-error">El apellido solo puede contener letras y espacios.</span>
             </div>
             <div class="form-group">
                 <label for="género">Género</label>
@@ -28,33 +34,38 @@
                     <option value="Femenino">Femenino</option>
                     <option value="Otro">Otro</option>
                 </select>
+                <span class="error-message" id="genero-error">Por favor, seleccione un género.</span>
             </div>
             <div class="form-group">
                 <label for="email">Correo Electrónico</label>
                 <input type="email" name="correo" class="input-lg" id="email" placeholder="Ingrese su correo electrónico" required>
+                <span class="error-message" id="email-error">Ingrese un correo electrónico válido.</span>
             </div>
             <div class="form-group">
                 <label for="phone">Teléfono</label>
-                <input type="tel" name="telefono" class="input-lg" id="phone" placeholder="Ingrese su número de teléfono" required>
+                <input type="tel" name="telefono" class="input-lg" id="phone" placeholder="Ingrese su número de teléfono" required pattern="\d{10}">
+                <span class="error-message" id="phone-error">El número de teléfono debe tener 10 dígitos.</span>
             </div>
             <div class="form-group">
                 <label for="card-number">Número de Tarjeta</label>
-                <input type="tel" name="numero_tarjeta" class="input-lg cc-number" id="card-number" placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;" required>
+                <input type="tel" name="numero_tarjeta" class="input-lg cc-number" id="card-number"
+                    placeholder="&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;"
+                    required>
+                <span class="error-message" id="card-number-error">El número de tarjeta debe tener 16 dígitos.</span>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="card-expiry">Fecha de Expiración</label>
-                        <input type="tel" name="fecha_expiracion" class="input-lg cc-exp" id="card-expiry" placeholder="MM/AA" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="card-cvc">CVC</label>
-                        <input type="tel" name="cvv" class="input-lg cc-cvc" id="card-cvc" placeholder="CVC" required>
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label for="card-expiry">Fecha de Expiración</label>
+                <input type="tel" name="fecha_expiracion" class="input-lg cc-exp" id="card-expiry" placeholder="MM/AA"
+                    required>
+                <span class="error-message" id="card-expiry-error">Ingrese una fecha válida en formato MM/AA.</span>
             </div>
+            <div class="form-group">
+                <label for="card-cvc">CVC</label>
+                <input type="tel" name="cvv" class="input-lg cc-cvc" id="card-cvc" placeholder="CVC" required pattern="\d{3,4}">
+                <span class="error-message" id="card-cvc-error">El CVC debe tener 3 o 4 dígitos.</span>
+            </div>
+
             <div class="form-group">
                 <button type="submit" class="btn">Registrar Cliente</button>
             </div>
@@ -64,30 +75,145 @@
     <script>
         $(function() {
             // Restringir la entrada a solo caracteres numéricos para ciertos campos
-            $('[data-numeric]').payment('restrictNumeric');
             $('.cc-number').payment('formatCardNumber');
             $('.cc-exp').payment('formatCardExpiry');
             $('.cc-cvc').payment('formatCardCVC');
-    
-            $('.cc-number').on('input', function() {
-                // Validar el número de tarjeta y mostrar error si es necesario
-                var cardType = $.payment.cardType($(this).val());
-                $(this).toggleInputError(!$.payment.validateCardNumber($(this).val()));
+
+            function showError(inputId, errorId, message) {
+                $(inputId).addClass('input-error');
+                $(errorId).text(message).show();
+            }
+
+            function hideError(inputId, errorId) {
+                $(inputId).removeClass('input-error');
+                $(errorId).hide();
+            }
+
+            // Validar nombre en tiempo real
+            $('#nombre').on('input', function() {
+                if (!this.checkValidity()) {
+                    showError('#nombre', '#nombre-error', 'El nombre solo puede contener letras y espacios.');
+                } else {
+                    hideError('#nombre', '#nombre-error');
+                }
             });
-    
+
+            // Validar apellido en tiempo real
+            $('#apellido').on('input', function() {
+                if (!this.checkValidity()) {
+                    showError('#apellido', '#apellido-error', 'El apellido solo puede contener letras y espacios.');
+                } else {
+                    hideError('#apellido', '#apellido-error');
+                }
+            });
+
+            // Validar género en tiempo real
+            $('#género').on('change', function() {
+                if (!$(this).val()) {
+                    showError('#género', '#genero-error', 'Por favor, seleccione un género.');
+                } else {
+                    hideError('#género', '#genero-error');
+                }
+            });
+
+            // Validar correo en tiempo real
+            $('#email').on('input', function() {
+                if (!this.checkValidity()) {
+                    showError('#email', '#email-error', 'Ingrese un correo electrónico válido.');
+                } else {
+                    hideError('#email', '#email-error');
+                }
+            });
+
+            // Validar teléfono en tiempo real
+            $('#phone').on('input', function() {
+                if (!this.checkValidity()) {
+                    showError('#phone', '#phone-error', 'El número de teléfono debe tener 10 dígitos.');
+                } else {
+                    hideError('#phone', '#phone-error');
+                }
+            });
+
+            // Validar número de tarjeta en tiempo real
+            $('.cc-number').on('input', function() {
+                var cardNumber = $(this).val().replace(/\s+/g, '');
+                if (!$.payment.validateCardNumber(cardNumber)) {
+                    showError('#card-number', '#card-number-error', 'El número de tarjeta no es válido.');
+                } else {
+                    hideError('#card-number', '#card-number-error');
+                }
+            });
+
+            // Validar fecha de expiración en tiempo real
+            $('.cc-exp').on('input', function() {
+                var cardExpiry = $(this).val().replace(/\s+/g, '');
+                var expiryParts = cardExpiry.split('/');
+                if (expiryParts.length === 2) {
+                    var month = expiryParts[0].trim();
+                    var year = expiryParts[1].trim();
+                    if ($.payment.validateCardExpiry(month, year)) {
+                        hideError('#card-expiry', '#card-expiry-error');
+                    } else {
+                        showError('#card-expiry', '#card-expiry-error', 'Ingrese una fecha válida en formato MM/AA.');
+                    }
+                } else {
+                    showError('#card-expiry', '#card-expiry-error', 'Ingrese una fecha válida en formato MM/AA.');
+                }
+            });
+
             $('#registration-form').submit(function(e) {
                 e.preventDefault();
-    
-                // Validaciones para otros campos...
-    
-                // Si todo está bien, continuar con el registro
-                if (!$('.has-error').length) {
-                    alert('Cliente registrado con éxito.');
-                    // Aquí puedes hacer una llamada AJAX para enviar los datos al servidor
+
+                var formData = {
+                    nombre: $('#nombre').val(),
+                    apellidos: $('#apellido').val(),
+                    genero: $('#género').val(),
+                    correo: $('#email').val(),
+                    telefono: $('#phone').val(),
+                    numero_tarjeta: $('#card-number').val().replace(/\s+/g, ''),
+                    fecha_expiracion: $('#card-expiry').val(),
+                    cvv: $('#card-cvc').val()
+                };
+
+                if (!$.payment.validateCardNumber(formData.numero_tarjeta)) {
+                    showError('#card-number', '#card-number-error', 'El número de tarjeta no es válido.');
+                    return;
                 }
+
+                if (!$.payment.validateCardCVC(formData.cvv)) {
+                    showError('#card-cvc', '#card-cvc-error', 'El CVC debe ser válido.');
+                    return;
+                }
+
+                var expiry = formData.fecha_expiracion.split('/');
+                if (expiry.length === 2) {
+                    var month = expiry[0].trim();
+                    var year = expiry[1].trim();
+                    if (!$.payment.validateCardExpiry(month, year)) {
+                        showError('#card-expiry', '#card-expiry-error', 'La fecha de expiración no es válida.');
+                        return;
+                    }
+                } else {
+                    showError('#card-expiry', '#card-expiry-error', 'La fecha de expiración no es válida.');
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ url_for('registrar_cliente') }}",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        $('#registration-form')[0].reset();
+                        alert('Cliente registrado exitosamente.');
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Ocurrió un error al registrar el cliente.');
+                    }
+                });
             });
         });
     </script>
-    
 </body>
 </html>
