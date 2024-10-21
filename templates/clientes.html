@@ -9,7 +9,11 @@
     <script src="{{ url_for('static', filename='js/jquery.payment.min.js') }}"></script>
 </head>
 <body>
+
     <div class="container mt-5">
+       <button type="submit" class="btn">
+           <a href="{{ url_for('index') }}" style="text-decoration: none; color: #efefef;">Volver a home</a>
+       </button>
         <h2>Registro de Clientes</h2>
         <form id="registration-form">
             <div class="form-group">

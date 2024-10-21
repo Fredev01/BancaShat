@@ -74,8 +74,6 @@ def clientes():
         customer.fecha_expiracion = fecha_expiracion_decrypted
         customer.cvv = cvv_decrypted
         customers_decrypted.append(customer)
-    for customer in customers_decrypted:
-        print(customer)
     return render_template('clientes.html', clientes=customers_decrypted)
 
 
