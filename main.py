@@ -56,10 +56,36 @@ def registrar_cliente():
         db.session.add(nuevo_cliente)
         db.session.commit()
     except Exception as e:
+        print(f"Error: {str(e)}")
         return jsonify({'message': 'Error al registrar el cliente'}), 500
 
     return jsonify({'message': 'Cliente registrado exitosamente'}), 201
 
+@app.post('/registrar_mensaje')
+def registrar_mensaje():
+    data = request.json
+    nombre = data.get('nombre')
+    correo = data.get('correo')
+    telefono = data.get('telefono')
+    mensaje = data.get('mensaje')
+    # TODO: Validar los datos
+
+    # Encriptar los datos
+    mensaje_encrypted = aes_encrypt.encrypt(mensaje)
+    try:
+        nuevo_mensaje = Mensaje(
+            nombre=nombre,
+            correo=correo,
+            telefono=telefono,
+            mensaje=mensaje_encrypted
+        )
+        db.session.add(nuevo_mensaje)
+        db.session.commit()
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({'message': 'Error al enviar mensaje'}), 500
+
+    return jsonify({'message': 'Mensaje enviado exitosamente'}), 201
 
 @app.get('/clientes')
 def clientes():
@@ -76,6 +102,9 @@ def clientes():
         customers_decrypted.append(customer)
     return render_template('clientes.html', clientes=customers_decrypted)
 
+@app.get('/mensajes')
+def mensajes():
+    return render_template('mensajes.html')
 
 if __name__ == "__main__":
     with app.app_context():

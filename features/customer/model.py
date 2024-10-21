@@ -3,7 +3,6 @@ from features import db
 
 
 class Customer(db.Model):
-
     id = Column(Integer, primary_key=True)
     nombre = Column(String(50), nullable=False)
     apellidos = Column(String(50), nullable=False)
@@ -18,3 +17,13 @@ class Customer(db.Model):
     def __repr__(self):
         return f'<Cliente nombre={self.nombre} apellidos={self.apellidos} genero={self.genero} correo={self.correo} telefono={self.telefono} numero_tarjeta={self.numero_tarjeta} fecha_expiracion={self.fecha_expiracion} cvv={self.cvv}>'
 
+class Mensaje(db.Model):
+    __tablename__ = 'mensajes'
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(50), nullable=False)
+    correo = Column(String(100), nullable=False) 
+    telefono = Column(String(15))  
+    mensaje = Column(Text, nullable=False)  
+
+    def __repr__(self):
+        return f'<Mensaje nombre={self.nombre} correo={self.correo} telefono={self.telefono} mensaje={self.mensaje}>'
